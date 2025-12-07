@@ -12,6 +12,7 @@ const UserLayout = () => {
     <main>
       <Outlet/>
     </main>
+    
     <Footer/>
     {/* footer */}
     </>
