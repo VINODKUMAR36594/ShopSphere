@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner';
 const selectedProduct={
     name:"Stylish Jacket",
     price:120,
@@ -24,13 +25,40 @@ const ProductDetails = () => {
     const [mainImage,setMainImage]=useState('');
     const [selectedSize,SetSelectedSize]=useState("");
     const [selectedColor,SetSelectedColor]=useState("");
-    const [quanity,setQuantity]=useState(1);
+    const [quantity,setQuantity]=useState(1);
     const [isButtonDisable,setIsButtonDisabled]=useState(false)
     useEffect(() => {
     if (selectedProduct?.images?.length > 0) {
         setMainImage(selectedProduct.images[0].url);
     }
 }, []);
+const handleQuantityChange=(action)=>
+{
+    if(action==="plus"){
+        setQuantity((prev)=>prev+1);
+    }
+    if(action==="minus" && quantity>1){
+        setQuantity((prev)=>prev-1);
+    }
+}
+const handleAddToCart=()=>{
+    if(!selectedSize || !selectedColor){
+        toast.error("Please select a size and color before adding to cart",{
+        duration:1000,
+    });
+    return;
+
+      
+}
+setIsButtonDisabled(true);
+setTimeout(()=>{
+    toast.success("Product added to Cart",{
+        duration:1000,
+    });
+    setIsButtonDisabled(false);
+},500);
+}
+
 
   return (
     <div className='p-6'>
@@ -48,7 +76,7 @@ const ProductDetails = () => {
                 {/* Main Image */}
                 <div className='md:w-1/2'>
                 <div className='mb-4'>
-                    <img src={mainImage} alt="Main Product" className='w-full h-auto objext-cover rounded-lg' />
+                    <img src={mainImage} alt="Main Product" className='w-full h-auto object-cover rounded-lg' />
                 </div>
                 </div>
                 {/* Mobile Thumbnails */}
@@ -86,7 +114,7 @@ const ProductDetails = () => {
                     <div className='flex gap-2 mt-2'>
                         {selectedProduct.sizes.map((size)=>(
                             <button key={size}
-                            onClick={()=>SetSelectedSize(size)} className= {`px-4 py-2 rounded border ${selectedSize===size?"bg-black text-white":} `}>{size}</button>
+                            onClick={()=>SetSelectedSize(size)} className= {`px-4 py-2 rounded border ${selectedSize===size?"bg-black text-white":"bg-white-700"} `}>{size}</button>
                         ))}
                     </div>
                 </div>
@@ -94,13 +122,13 @@ const ProductDetails = () => {
                 <div className='mb-6'>
                     <p className='text-gray-700'>Quantity:</p>
                     <div className='flex items-center space-x-4 mt-2'>
-                        <button className='px-2 py-1 bg-ggray-200 rounded text-lg'>-</button>
-                        <span className='text-lg'>1</span>
-                                                <button className='px-2 py-1 bg-ggray-200 rounded text-lg'>+</button>
+                        <button  onClick={()=>handleQuantityChange("minus")}  className='px-2 py-1 bg-ggray-200 rounded text-lg'>-</button>
+                        <span className='text-lg'>{quantity}</span>
+                                                <button  onClick={()=>handleQuantityChange("plus")}className='px-2 py-1 bg-ggray-200 rounded text-lg'>+</button>
 
                     </div>
                 </div>
-                <button className='bg-black text-white py-2 px-6 rounded w-full mb-4'>ADD TO CART</button>
+                <button disabled={isButtonDisable} onClick={handleAddToCart}  className='bg-black text-white py-2 px-6 rounded w-full mb-4'>ADD TO CART</button>
                 <div className='mt-10 text-gray-700'>
                     <h3 className='text-xl font-boldmb-4'>Characteristics:</h3>
                     <table className='w-full text-left text-sm text-gray-600'>
