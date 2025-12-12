@@ -65,7 +65,7 @@ const selectedProduct={
 
 }
 const ProductDetails = () => {
-    const [mainImage,setMainImage]=useState('');
+    const [mainImage,setMainImage]=useState('https://picsum.photos/500/500?random=1');
     const [selectedSize,SetSelectedSize]=useState("");
     const [selectedColor,SetSelectedColor]=useState("");
     const [quantity,setQuantity]=useState(1);
@@ -119,7 +119,7 @@ setTimeout(()=>{
                 {/* Main Image */}
                 <div className='md:w-1/2'>
                 <div className='mb-4'>
-                    <img src={mainImage} alt="Main Product" className='w-full h-auto object-cover rounded-lg' />
+                    <img src={mainImage} alt="Main Product" className='w-full h-auto object-cover rounded-lg'/>
                 </div>
                 </div>
                 {/* Mobile Thumbnails */}
