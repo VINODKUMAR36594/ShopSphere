@@ -1,5 +1,48 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner';
+import ProductGrid from './ProductGrid'
+const similarProduct=[
+    {
+        _id:1,
+        name:"product 1",
+        price:100,
+        images:[{
+            url:"https://picsum.photos/500/500?randome=1"
+        }],
+
+
+    },
+    {
+        _id:2,
+        name:"product 2",
+        price:100,
+        images:[{
+            url:"https://picsum.photos/500/500?randome=2"
+        }],
+
+
+    },
+    {
+        _id:3,
+        name:"product 3",
+        price:100,
+        images:[{
+            url:"https://picsum.photos/500/500?randome=3"
+        }],
+
+
+    },
+    {
+        _id:4,
+        name:"product 4",
+        price:100,
+        images:[{
+            url:"https://picsum.photos/500/500?randome=4"
+        }],
+
+
+    },
+]
 const selectedProduct={
     name:"Stylish Jacket",
     price:120,
@@ -128,7 +171,7 @@ setTimeout(()=>{
 
                     </div>
                 </div>
-                <button disabled={isButtonDisable} onClick={handleAddToCart}  className='bg-black text-white py-2 px-6 rounded w-full mb-4'>ADD TO CART</button>
+                <button disabled={isButtonDisable} onClick={handleAddToCart}  className={`bg-black text-white py-2 px-6 rounded w-full mb-4 ${isButtonDisable?"cursor-not-allowed opacity-50":"hover:bg-gray-900"}`}>{isButtonDisable?"Adding..":"ADD TO CART"}</button>
                 <div className='mt-10 text-gray-700'>
                     <h3 className='text-xl font-boldmb-4'>Characteristics:</h3>
                     <table className='w-full text-left text-sm text-gray-600'>
@@ -145,6 +188,12 @@ setTimeout(()=>{
                     </table>
                 </div>
                 </div>
+            </div>
+            <div className='mt-20'>
+                <h2 className='text-2xl text-center font-medium mb-4'>
+                    You May Also Like
+                </h2>
+                <ProductGrid products={similarProduct}/>
             </div>
         </div>
         
