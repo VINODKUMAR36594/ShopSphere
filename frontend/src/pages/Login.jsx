@@ -4,10 +4,14 @@ import login from '../assets/login.webp'
 const Login = () => {
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
+     const handleSubmit=(e)=>{
+        e.preventDefault();
+        console.log("User Login",{email,password});
+    }
   return (
     <div className='flex '>
         <div className='w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-12'>
-        <form className='w-full max-w-md bg-white p-8 rounded-lg border shadow-sm'>
+        <form  onClick={handleSubmit} className='w-full max-w-md bg-white p-8 rounded-lg border shadow-sm'>
             <div className='flex justify-center mb-6 '>
                 <h2 className='text-xl font-medium '>ShopSphere</h2></div>
                 <h2 className='text-2xl font-bold text-center mb-6'>Hey there! </h2>

@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import {Toaster} from "sonner";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
 function App(){
   return(
   <BrowserRouter>
@@ -21,6 +22,7 @@ function App(){
       {/* Admin Layout*/}
 
     </Route>
+    <Route path="profile" element={<Profile/>}></Route>
   </Routes>
   </BrowserRouter>
   )
