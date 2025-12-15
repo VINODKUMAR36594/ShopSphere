@@ -11,9 +11,14 @@ const MyOrders = () => {
                     shippingAddress:{city:"New York ",country:"USA"},
                     orderItems:[
                         {
-                          name:  "Product 1"
-                        }
-                    ]
+                          name:  "Product 1",
+                          image:"https://picsum.photos/500/500?random=1",
+
+                        },
+
+                    ],
+                    totalPrice:100,
+                    isPaid:true,
                 }
             ]
         })
