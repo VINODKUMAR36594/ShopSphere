@@ -7,6 +7,7 @@ import {Toaster} from "sonner";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import CollectionPage from "./pages/CollectionPage";
 function App(){
   return(
   <BrowserRouter>
@@ -22,6 +23,7 @@ function App(){
       {/* Admin Layout*/}
 
     </Route>
+    <Route path="collections/:collection" element={<CollectionPage/>}></Route>
     <Route path="profile" element={<Profile/>}></Route>
   </Routes>
   </BrowserRouter>
