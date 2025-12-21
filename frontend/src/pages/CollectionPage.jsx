@@ -10,7 +10,9 @@ const CollectionPage = () => {
         setIsSidebarOpen(!isSidebarOpen);
     }
     // const handleClickOutside=(e)=>{
-    //     if(isSidebarRef.current && !sidebarRef.current.contains(e.target)) 
+    //     if(isSidebarRef.current && !sidebarRef.current.contains(e.target)) {
+
+    //     }
     // }
     useEffect(()=>{
         //add event listenr for class
