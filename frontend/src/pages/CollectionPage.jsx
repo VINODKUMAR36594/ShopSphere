@@ -51,9 +51,8 @@ const CollectionPage = () => {
         className='lg:hidden border p-2 flex justify-center items-center'
       >
         <FaFilter className='mr-2' />
-        Filter
+        Filters
       </button>
-
       {/* Filter Sidebar */}
       <div
         ref={sidebarRef}
