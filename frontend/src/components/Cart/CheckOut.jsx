@@ -63,7 +63,7 @@ const CheckOut = () => {
                 <div></div>
             </form>
         </div>
-      
+ 
     </div>
   )
 }
