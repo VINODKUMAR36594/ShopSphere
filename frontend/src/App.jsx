@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import CollectionPage from "./pages/CollectionPage";
 import ProductDetails from "./components/Products/ProductDetails";
 import CheckOut from './components/Cart/CheckOut'
+import OrderConfirmationPage from "./pages/OrderConfirmationPage";
 function App(){
   return(
   <BrowserRouter>
@@ -29,6 +30,7 @@ function App(){
     <Route path="product/:id" element={<ProductDetails/>}> </Route>
     <Route path="profile" element={<Profile/>}></Route>
     <Route path='/checkout' element={<CheckOut/>}></Route>
+    <Route path="order-confirmation" element={<OrderConfirmationPage/>}></Route>
   </Routes>
   </BrowserRouter>
   )
