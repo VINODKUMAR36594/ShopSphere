@@ -40,7 +40,6 @@ const OrderConfirmationPage = () => {
             </p>
         </div>
       )}
-      
     </div>
   )
 }
