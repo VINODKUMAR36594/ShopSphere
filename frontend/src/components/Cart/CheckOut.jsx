@@ -167,7 +167,7 @@ const CheckOut = () => {
                                 <h3 className='text-md'>{product.name}</h3>
                                 <p className='text-gray-500'>Size: {product.size}</p>
                                 <p className='text-gray-500'>Color: {product.color}</p>
-                                <p className='text-xl'>${product.price.toLocaleString()}</p>
+                                <p className='text-xl'>${product.price.toLocaleString()}</p> 
                             </div>
                         </div>
                     ))}
@@ -187,7 +187,6 @@ const CheckOut = () => {
                     <p>Total</p>
                     <p>${cart.totalPrice.toLocaleString()}</p>
                 </div>
-               
             </div>
             
         </div>
