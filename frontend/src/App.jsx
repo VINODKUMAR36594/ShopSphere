@@ -12,6 +12,8 @@ import OrderConfirmationPage from "./pages/OrderConfirmationPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
 import MyOrders from "./pages/MyOrders";
 import AdminLayout from "./Admin/AdminLayout";
+import AdminHomePage from "./pages/AdminHomePage";
+import UserManagement from "./Admin/UserManagement";
 function App(){
   return(
   <BrowserRouter>
@@ -34,7 +36,11 @@ function App(){
     <Route path="order-confirmation" element={<OrderConfirmationPage/>}></Route>
     <Route path='order/:id' element={<OrderDetailPage/>}></Route>
     <Route path='my-orders' element={<MyOrders/>}></Route>
-    <Route path='/admin' element={<AdminLayout/>}> </Route>
+    <Route path='/admin' element={<AdminLayout/>}>
+    <Route index element={<AdminHomePage/>}/>
+     <Route path="users" element={<UserManagement/>}></Route>
+     </Route>
+    
   </Routes>
   </BrowserRouter>
   )
