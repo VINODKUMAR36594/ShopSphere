@@ -16,6 +16,7 @@ import AdminHomePage from "./pages/AdminHomePage";
 import UserManagement from "./Admin/UserManagement";
 import ProductManagement from "./Admin/ProductManagement";
 import EditProductPage from "./Admin/EditProductPage";
+import OrderManagement from "./Admin/OrderManagement";
 function App(){
   return(
   <BrowserRouter>
@@ -43,6 +44,7 @@ function App(){
      <Route path="users" element={<UserManagement/>}></Route>
      <Route path='products' element={<ProductManagement/>}></Route>
      <Route path="products/:id/edit" element={<EditProductPage/>}></Route>
+     <Route path="orders" element={<OrderManagement/>}></Route>
      </Route>
     
   </Routes>
