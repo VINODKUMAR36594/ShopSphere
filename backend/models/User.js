@@ -30,13 +30,13 @@ const userSchema = new mongoose.Schema(
 );
 
 // password hash middleware (FIXED)
-userSchema.pre("save", async function (next) {
-    if (!this.isModified('password')) return next();
+userSchema.pre("save", async function () {
+    if (!this.isModified('password')) return ;
 
     const salt = await bcrypt.genSalt(10);   // ✅ generate salt
     this.password = await bcrypt.hash(this.password, salt); // ✅ hash & assign
 
-    next();
+    // next();
 });
 
 // match user entered password
