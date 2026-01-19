@@ -9,6 +9,9 @@ const CartRoutes=require('./routes/CartRoutes.js')
 const checkoutRoutes=require('./routes/checkoutRoute.js')
 const orderRoutes=require('./routes/orderRoutes.js')
 const uploadRoutes=require('./routes/uploadRoutes.js')
+const subscriberRoute=require('./routes/SubscribeRoute.js')
+const adminroutes=require('./routes/adminRoutes.js')
+const productAdminRoutes=require('./routes/productAdminRoutes.js')
 app.use(express.json());
 app.use(cors());
 console.log("JWT_SECRET:", process.env.JWT_SECRET);
@@ -28,6 +31,9 @@ app.use('/api/cart',CartRoutes)
 app.use('/api/checkout',checkoutRoutes)
 app.use('/api/orders',orderRoutes)
 app.use('/api/upload',uploadRoutes)
+app.use('/api',subscriberRoute)
+app.use('/api/admin/users',adminroutes)
+app.use('/api/admin/products',productAdminRoutes)
 app.listen(PORT,()=>{
     console.log(`server is running on ${PORT}`)
 })
