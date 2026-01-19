@@ -12,6 +12,7 @@ const uploadRoutes=require('./routes/uploadRoutes.js')
 const subscriberRoute=require('./routes/SubscribeRoute.js')
 const adminroutes=require('./routes/adminRoutes.js')
 const productAdminRoutes=require('./routes/productAdminRoutes.js')
+const adminOrderRoutes=require('./routes/adminOrderRoutes.js')
 app.use(express.json());
 app.use(cors());
 console.log("JWT_SECRET:", process.env.JWT_SECRET);
@@ -34,6 +35,7 @@ app.use('/api/upload',uploadRoutes)
 app.use('/api',subscriberRoute)
 app.use('/api/admin/users',adminroutes)
 app.use('/api/admin/products',productAdminRoutes)
+app.use('/api/admin/order',adminOrderRoutes)
 app.listen(PORT,()=>{
     console.log(`server is running on ${PORT}`)
 })
