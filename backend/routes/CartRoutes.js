@@ -5,18 +5,18 @@ const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-/* ======================================================
+/* =====================================================
    HELPER
-====================================================== */
+===================================================== */
 const getCart = async (userId, guestId) => {
   if (userId) return await Cart.findOne({ user: userId });
   if (guestId) return await Cart.findOne({ guestId });
   return null;
 };
 
-/* ======================================================
+/* =====================================================
    ADD TO CART
-====================================================== */
+===================================================== */
 router.post("/", async (req, res) => {
   try {
     const { productId, quantity, size, color, guestId, userId } = req.body;
@@ -60,7 +60,7 @@ router.post("/", async (req, res) => {
       );
 
       await cart.save();
-      return res.status(200).json(cart);
+      return res.json(cart);
     }
 
     const newCart = await Cart.create({
@@ -87,9 +87,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-/* ======================================================
+/* =====================================================
    UPDATE CART ITEM
-====================================================== */
+===================================================== */
 router.put("/", async (req, res) => {
   try {
     const { productId, quantity, size, color, guestId, userId } = req.body;
@@ -105,7 +105,7 @@ router.put("/", async (req, res) => {
     );
 
     if (productIndex === -1) {
-      return res.status(404).json({ message: "Product not found in cart" });
+      return res.status(404).json({ message: "Product not in cart" });
     }
 
     if (quantity > 0) {
@@ -120,16 +120,16 @@ router.put("/", async (req, res) => {
     );
 
     await cart.save();
-    res.status(200).json(cart);
+    res.json(cart);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server Error" });
   }
 });
 
-/* ======================================================
+/* =====================================================
    REMOVE FROM CART
-====================================================== */
+===================================================== */
 router.delete("/", async (req, res) => {
   try {
     const { productId, size, color, guestId, userId } = req.body;
@@ -137,18 +137,18 @@ router.delete("/", async (req, res) => {
     const cart = await getCart(userId, guestId);
     if (!cart) return res.status(404).json({ message: "Cart not found" });
 
-    const productIndex = cart.products.findIndex(
+    const index = cart.products.findIndex(
       (p) =>
         p.productId.toString() === productId &&
         p.size === size &&
         p.color === color
     );
 
-    if (productIndex === -1) {
+    if (index === -1) {
       return res.status(404).json({ message: "Product not found in cart" });
     }
 
-    cart.products.splice(productIndex, 1);
+    cart.products.splice(index, 1);
 
     cart.totalPrice = cart.products.reduce(
       (acc, item) => acc + item.price * item.quantity,
@@ -156,16 +156,16 @@ router.delete("/", async (req, res) => {
     );
 
     await cart.save();
-    res.status(200).json(cart);
+    res.json(cart);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server Error" });
   }
 });
 
-/* ======================================================
-   FETCH CART
-====================================================== */
+/* =====================================================
+   GET CART
+===================================================== */
 router.get("/", async (req, res) => {
   try {
     const { userId, guestId } = req.query;
@@ -184,9 +184,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-/* ======================================================
-   MERGE GUEST CART → USER CART
-====================================================== */
+/* =====================================================
+   MERGE CART (PROTECTED)
+===================================================== */
 router.post("/merge", protect, async (req, res) => {
   try {
     const { guestId } = req.body;
@@ -194,9 +194,7 @@ router.post("/merge", protect, async (req, res) => {
     const guestCart = await Cart.findOne({ guestId });
     const userCart = await Cart.findOne({ user: req.user._id });
 
-    if (!guestCart) {
-      return res.status(404).json({ message: "Guest cart not found" });
-    }
+    if (!guestCart) return res.status(404).json({ message: "Guest cart not found" });
 
     if (userCart) {
       guestCart.products.forEach((guestItem) => {
