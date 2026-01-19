@@ -17,8 +17,11 @@ import UserManagement from "./Admin/UserManagement";
 import ProductManagement from "./Admin/ProductManagement";
 import EditProductPage from "./Admin/EditProductPage";
 import OrderManagement from "./Admin/OrderManagement";
+import {Provider} from 'react-redux'
+import store from './redux/store'
 function App(){
   return(
+    <Provider store={store}>
   <BrowserRouter>
   <Toaster position="top-right"/>
   <Routes>
@@ -49,6 +52,8 @@ function App(){
     
   </Routes>
   </BrowserRouter>
+
+  </Provider>
   )
 }
 

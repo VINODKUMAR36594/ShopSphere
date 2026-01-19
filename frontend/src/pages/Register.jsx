@@ -1,12 +1,16 @@
 import React,{useState} from 'react'
 import {Link} from 'react-router-dom'
 import register from '../assets/register.webp'
+import { registerUser } from '../../slices/authSlice'
+import { useDispatch } from 'react-redux'
 const Register = () => {
     const [name,SetName]=useState("")
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
+    const dispatch=useDispatch();
     const handleSubmit=(e)=>{
         e.preventDefault();
+        dispatch(registerUser({name,email,password}));
         console.log("User Register",{name,email,password});
     }
   return (
@@ -63,7 +67,7 @@ const Register = () => {
                 </div>
                 <div className='hidden md:block w-1/2 bg-gray-800'>
                 <div className='h-full flex flex-col justify-center items-center'>
-                    <img src={register} alt="Login to Account" className='h-[750px] w-full object-cover '/>
+                    <img src={register} alt="Login to Account" className='h-187.5 w-full object-cover '/>
                     </div>
                     </div>
     </div>

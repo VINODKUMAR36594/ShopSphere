@@ -1,47 +1,45 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs')
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
-    {
-        name: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-            trim: true,
-            match: [/.+@.+\..+/, "Please enter a valid email address"],
-        },
-        password: {
-            type: String,
-            required: true,
-            minLength: 6,
-        },
-        role: {
-            type: String,
-            enum: ["customer", "admin"],
-            default: "customer"
-        },
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    { timestamps: true }
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 6,
+    },
+    role: {
+      type: String,
+      enum: ["customer", "admin"],
+      default: "customer",
+    },
+  },
+  { timestamps: true }
 );
 
-// password hash middleware (FIXED)
+// ✅ CORRECT: async middleware WITHOUT next
 userSchema.pre("save", async function () {
-    if (!this.isModified('password')) return ;
+  if (!this.isModified("password")) return;
 
-    const salt = await bcrypt.genSalt(10);   // ✅ generate salt
-    this.password = await bcrypt.hash(this.password, salt); // ✅ hash & assign
-
-    // next();
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
-// match user entered password
+// ✅ password compare
 userSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
 module.exports = mongoose.model("User", userSchema);

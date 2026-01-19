@@ -1,50 +1,76 @@
-const express=require("express")
-const User=require('../models/User.js')
-const jwt=require("jsonwebtoken")
+const express = require("express");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 const { protect } = require("../middleware/authMiddleware");
-const router=express.Router();
 
-// @route Post/api/users/register
+const router = express.Router();
 
-router.post('/register',async(req,res)=>{
-    const {name,email,password}=req.body;
-    try{
-        let user=await User.findOne({email})
-        if(user) return res.status(400).json({ message:"user already exits"});
-        user=new User({name ,email,password})
-        await user.save()
-        const payload={user:{id:user._id,role:user.role}};
+// ================= REGISTER =================
+router.post("/register", async (req, res) => {
+  const { name, email, password } = req.body;
 
-        // Sign and return the token along with user data
-        jwt.sign(payload,process.env.JWT_SECRET,{expiresIn:"12h"},(err,token)=>{
-            if(err) throw err;
-            res.status(201).json({
-                token,
-                user:{
-                    _id:user._id,
-                    name:user.name,
-                    email:user.email,
-                    role:user.role,
-                },
-            })
-        })
-    }
-    catch(error){
-        console.log(error);
-        res.status(500).send("Server Error1")
-    }
-})
-
-
-router.post("/login", async (req, res) => {
-  if (!req.body) {
-    return res.status(400).json({ message: "Request body missing" });
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: "All fields are required" });
   }
 
+  try {
+    const emailLower = email.toLowerCase();
+
+    const userExists = await User.findOne({ email: emailLower });
+    if (userExists) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const user = await User.create({
+      name,
+      email: emailLower,
+      password,
+    });
+
+    const payload = {
+      user: {
+        id: user._id,
+        role: user.role,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: "12h" },
+      (err, token) => {
+        if (err) throw err;
+
+        res.status(201).json({
+          token,
+          user: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          },
+        });
+      }
+    );
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// ================= LOGIN =================
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res
+      .status(400)
+      .json({ message: "Email and password are required" });
+  }
+
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
+
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
@@ -68,7 +94,6 @@ router.post("/login", async (req, res) => {
       (err, token) => {
         if (err) throw err;
 
-        // ✅ SEND TOKEN
         res.status(200).json({
           token,
           user: {
@@ -82,15 +107,13 @@ router.post("/login", async (req, res) => {
     );
   } catch (error) {
     console.error(error);
-    res.status(500).send("Server Error");
+    res.status(500).json({ message: "Server Error" });
   }
 });
 
-// route for user profiles
+// ================= PROFILE =================
+router.get("/profile", protect, async (req, res) => {
+  res.json(req.user);
+});
 
-router.get("/profile",protect,async (req,res)=>{
-    res.json(req.user);
-})
-
-
-module.exports=router;
+module.exports = router;
