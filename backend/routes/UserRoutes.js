@@ -1,7 +1,7 @@
 const express=require("express")
 const User=require('../models/User.js')
 const jwt=require("jsonwebtoken")
-const { protect } = require("../middleaware/authMiddleaware");
+const { protect } = require("../middleware/authMiddleware");
 const router=express.Router();
 
 // @route Post/api/users/register
@@ -19,6 +19,7 @@ router.post('/register',async(req,res)=>{
         jwt.sign(payload,process.env.JWT_SECRET,{expiresIn:"12h"},(err,token)=>{
             if(err) throw err;
             res.status(201).json({
+                token,
                 user:{
                     _id:user._id,
                     name:user.name,

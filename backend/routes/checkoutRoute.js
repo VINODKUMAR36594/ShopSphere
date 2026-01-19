@@ -5,7 +5,7 @@ const Checkout = require("../models/Checkout");
 const Cart = require("../models/Cart");
 const Order = require("../models/Order");
 
-const { protect } = require("../middleaware/authMiddleaware");
+const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
