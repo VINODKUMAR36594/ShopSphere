@@ -285,22 +285,20 @@ router.get('/best-seller',async(req,res)=>{
             res.status(404).json({message:"not found"})
         }
     } catch (error) {
-        console.error(error)
-        res.status(500).send("server error")
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
     }
-})
-// _____________________________________
-router.get('/new-arrivals',async (req,res)=>{
-    try {
-        // fetch latest 
-        const newArrivals=await Product.find().sort({ createdAt:-1}).limit(8);
-        res.json(newArrivals)
+});
 
+router.get('/new-arrivals', async (req, res) => {
+    try {
+        const newArrivals = await Product.find().sort({ createdAt: -1 }).limit(8);
+        res.json(newArrivals);
     } catch (error) {
         console.error(error);
-        res.status(500).send("server error");
+        res.status(500).json({ message: "Server error" });
     }
-})
+});
 router.get("/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);

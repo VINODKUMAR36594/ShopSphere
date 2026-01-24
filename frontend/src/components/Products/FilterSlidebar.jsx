@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 const FilterSidebar = () => {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const categories = ["Top Wear", "Bottom Wear"];
   const genders = ["MEN", "WOMEN"];

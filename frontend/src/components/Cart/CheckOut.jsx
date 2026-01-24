@@ -48,12 +48,6 @@ const CheckOut = () => {
         e.preventDefault();
         setCheckOutId(123);
     };
-    const calculateEstimateDelivery = (orderDate) => {
-        const order = new Date(orderDate);
-        const estimatedDelivery = new Date(order);
-        estimatedDelivery.setDate(order.getDate() + 7);
-        return estimatedDelivery.toLocaleDateString();
-    }
 
     return (
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto py-10 px-6 tracking-tighter'>

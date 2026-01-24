@@ -31,10 +31,6 @@ function App(){
       {/* User Layout */}
       <Route index element={<Home/>}/>
        </Route>
-    <Route>
-      {/* Admin Layout*/}
-
-    </Route>
     <Route path="collections/:collection" element={<CollectionPage/>}></Route>
     <Route path="product/:id" element={<ProductDetails/>}> </Route>
     <Route path="profile" element={<Profile/>}></Route>

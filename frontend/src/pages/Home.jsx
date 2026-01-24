@@ -1,99 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import Hero from '../components/Layout/Hero'
 import GenderCollectionsSection from '../components/Products/GenderCollectionsSection'
 import NewArrivals from '../components/Products/NewArrivals'
-import ProductDetails from '../components/Products/ProductDetails'
 import ProductGrid from '../components/Products/ProductGrid'
 import FeaturedCollection  from '../components/Products/FeaturedCollection'
 import FeaturesSection from '../components/Products/FeaturesSection'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchProductsByFilters } from '../../slices/productSlice'
-const placeholderProducts =[
-   {
-        _id:1,
-        name:"product 1",
-        price:100,
-        images:[{
-            url:"https://picsum.photos/500/500?randome=1"
-        }],
+import { Link } from 'react-router-dom'
 
-
-    },
-    {
-        _id:2,
-        name:"product 2",
-        price:100,
-        images:[{
-            url:"https://picsum.photos/500/500?randome=2"
-        }],
-
-
-    },
-    {
-        _id:3,
-        name:"product 3",
-        price:100,
-        images:[{
-            url:"https://picsum.photos/500/500?randome=3"
-        }],
-
-
-    },
-    {
-        _id:4,
-        name:"product 4",
-        price:100,
-        images:[{
-            url:"https://picsum.photos/500/500?randome=4"
-        }],
-
-
-    },
-     {
-        _id:1,
-        name:"product 5",
-        price:100,
-        images:[{
-            url:"https://picsum.photos/500/500?randome=5"
-        }],
-
-
-    },
-    {
-        _id:2,
-        name:"product 6",
-        price:100,
-        images:[{
-            url:"https://picsum.photos/500/500?randome=6"
-        }],
-
-
-    },
-    {
-        _id:3,
-        name:"product 7",
-        price:100,
-        images:[{
-            url:"https://picsum.photos/500/500?randome=7"
-        }],
-
-
-    },
-    {
-        _id:4,
-        name:"product 8",
-        price:100,
-        images:[{
-            url:"https://picsum.photos/500/500?random=8"
-        }],
-
-
-    },
-]
 const Home = () => {
     const dispatch=useDispatch();
     const {products,loading,error}=useSelector((state)=>state.products)
-    const [bestSellerProduct,setBestSellerProducr]=useState(null)
+    const [bestSellerProduct,setBestSellerProduct]=useState(null)
     useEffect(()=>{
         dispatch(fetchProductsByFilters({
             gender:"Women",
@@ -103,14 +23,12 @@ const Home = () => {
         const fetchBestSeller =async ()=>{
             try {
                 const response =await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/best-seller`)
-                setBestSellerProducr(response.data)
+                setBestSellerProduct(response.data?.bestseller ?? null)
             } catch (error) {
                 console.error(error);
-                
             }
         }
         fetchBestSeller();
-
     },[dispatch])
   return (
     <div>
@@ -119,8 +37,20 @@ const Home = () => {
         <NewArrivals/>
         {/* best seller section */}
         <h2 className='text-3xl text-center font-bold mb-4'>Best Seller</h2>
-        {bestSellerProduct?(<ProductDetails productId={bestSellerProduct._id}/>):(
-            <p className='text-center'>Laoding best seller product....</p>
+        {bestSellerProduct ? (
+            <div className='container mx-auto text-center mb-8'>
+                <Link to={`/product/${bestSellerProduct._id}`} className='inline-block'>
+                    <div className='max-w-xs mx-auto rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow'>
+                        <img src={bestSellerProduct.images?.[0]?.url || '/placeholder.png'} alt={bestSellerProduct.name} className='w-full h-64 object-cover' />
+                        <div className='p-4 bg-white'>
+                            <h3 className='font-semibold text-lg'>{bestSellerProduct.name}</h3>
+                            <p className='text-gray-600'>₹{bestSellerProduct.price}</p>
+                        </div>
+                    </div>
+                </Link>
+            </div>
+        ) : (
+            <p className='text-center'>Loading best seller product....</p>
         )}
       
 
