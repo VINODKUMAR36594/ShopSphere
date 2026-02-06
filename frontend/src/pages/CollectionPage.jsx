@@ -3,8 +3,21 @@ import { FaFilter } from 'react-icons/fa';
 import FilterSidebar from '../components/Products/FilterSlidebar';
 import SortOptions from '../components/Products/SortOptions';
 import ProductGrid from '../components/Products/ProductGrid'
+import { useParams, useSearchParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProductsByFilters } from '../redux/slices/productSlice';
 const CollectionPage = () => {
-  const [products, setProducts] = useState([]);
+  const {collection}=useParams();
+  const [searchParams]=useSearchParams();
+  const dispatch=useDispatch();
+  const {products,loading,error}=useSelector((state)=>
+    state.products
+  )
+  const queryParams=Object.fromEntries([...searchParams])
+  useEffect(()=>{
+    dispatch(fetchProductsByFilters({collection,...queryParams}))
+  },[dispatch,collection,searchParams])
+  // const [products, setProducts] = useState([]);
   const sidebarRef = useRef(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -28,20 +41,7 @@ const CollectionPage = () => {
     };
   }, []);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setProducts([
-        { _id: 1, name: "product 1", price: 100, images: [{ url: "https://picsum.photos/500/500?random=1" }] },
-        { _id: 2, name: "product 2", price: 100, images: [{ url: "https://picsum.photos/500/500?random=2" }] },
-        { _id: 3, name: "product 3", price: 100, images: [{ url: "https://picsum.photos/500/500?random=3" }] },
-        { _id: 4, name: "product 4", price: 100, images: [{ url: "https://picsum.photos/500/500?random=4" }] },
-        { _id: 5, name: "product 5", price: 100, images: [{ url: "https://picsum.photos/500/500?random=5" }] },
-        { _id: 6, name: "product 6", price: 100, images: [{ url: "https://picsum.photos/500/500?random=6" }] },
-        { _id: 7, name: "product 7", price: 100, images: [{ url: "https://picsum.photos/500/500?random=7" }] },
-        { _id: 8, name: "product 8", price: 100, images: [{ url: "https://picsum.photos/500/500?random=8" }] }
-      ]);
-    }, 1000);
-  }, []);
+  
 
   return (
     <div className='flex flex-col lg:flex-row'>
@@ -67,7 +67,7 @@ const CollectionPage = () => {
         {/* sort option */}
         <SortOptions/>
         {/* Proudct Grid */}
-        <ProductGrid products={products}/>
+        <ProductGrid products={products} loading={loading} error={error}/>
       </div>
     </div>
   );

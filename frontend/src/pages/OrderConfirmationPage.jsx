@@ -1,28 +1,22 @@
-import React from "react";
-
-
-const checkout = {
-  _id: "1234",
-  createdAt: new Date(),
-  checkoutItems: [
-    {
-      productId: "1",
-      name: "Jacket",
-      color: "Black",
-      size: "M",
-      price: 120,
-      quantity: 2,
-      image: "https://picsum.photos/150?random=1",
-    },
-  ],
-  shippingAddress: {
-    address: "123 Fashion Street",
-    city: "New York",
-    country: "USA",
-  },
-};
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux"; // ✅ missing
+import { useNavigate } from "react-router-dom"; // ✅ missing
+import { clearCart } from "../redux/slices/cartSlice"; // ✅ correct import
 
 const OrderConfirmationPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { checkout } = useSelector((state) => state.checkout);
+
+  useEffect(() => {
+    if (checkout && checkout._id) {
+      dispatch(clearCart()); // ✅ FIX: clearcart → clearCart
+      localStorage.removeItem("cart");
+    } else {
+      navigate("/my-order"); // ⚠ keeping your logic unchanged
+    }
+  }, [checkout, dispatch, navigate]);
+
   const calculateEstimatedDelivery = (createdAt) => {
     const orderDate = new Date(createdAt);
     orderDate.setDate(orderDate.getDate() + 10);
@@ -81,20 +75,23 @@ const OrderConfirmationPage = () => {
                     Quantity: {item.quantity}
                   </p>
                 </div>
-                {/* payment and delivery info */}
 
-                <p className="font-semibold">
-                  <h2>Payment</h2>
-                  <h2>Paypal</h2>
-                  ${item.price * item.quantity}
-                </p>
+                {/* Payment info */}
+                <div className="text-right">
+                  <p className="font-medium">Payment: PayPal</p>
+                  <p className="font-semibold">
+                    ${item.price * item.quantity}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
 
           {/* Shipping Address */}
           <div>
-            <h3 className="text-lg font-semibold mb-2">Shipping Address</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              Shipping Address
+            </h3>
             <p className="text-gray-600">
               {checkout.shippingAddress.address},{" "}
               {checkout.shippingAddress.city},{" "}

@@ -3,12 +3,21 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 const FilterSidebar = () => {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const categories = ["Top Wear", "Bottom Wear"];
   const genders = ["MEN", "WOMEN"];
   const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
-  const colors = ["red", "yellow", "blue", "green", "black", "brown", "pink", "white"];
+  const colors = [
+    "red",
+    "yellow",
+    "blue",
+    "green",
+    "black",
+    "brown",
+    "pink",
+    "white",
+  ];
   const materials = ["Cotton", "Polyester", "Denim", "Wool", "Silk", "Linen"];
   const brands = ["Nike", "Adidas", "Zara", "H&M", "Levi's", "Uniqlo"];
 
@@ -87,9 +96,7 @@ const FilterSidebar = () => {
     <div className="flex gap-6">
       <div className="p-4 w-64 border rounded bg-white">
         <h3 className="text-xl font-semibold mb-4">Filters</h3>
-
         CATEGORY
-        
         {categories.map((cat) => (
           <label key={cat} className="flex items-center">
             <input
@@ -102,7 +109,6 @@ const FilterSidebar = () => {
             <span className="ml-2">{cat}</span>
           </label>
         ))}
-
         GENDER
         {genders.map((gen) => (
           <label key={gen} className="flex items-center">
@@ -116,7 +122,6 @@ const FilterSidebar = () => {
             <span className="ml-2">{gen}</span>
           </label>
         ))}
-
         COLOR
         <div className="flex gap-2 my-3 flex-wrap">
           {colors.map((color) => (
@@ -130,7 +135,6 @@ const FilterSidebar = () => {
             />
           ))}
         </div>
-
         SIZE
         {sizes.map((size) => (
           <label key={size} className="flex items-center">
@@ -144,7 +148,6 @@ const FilterSidebar = () => {
             <span className="ml-2">{size}</span>
           </label>
         ))}
-
         MATERIAL
         {materials.map((mat) => (
           <label key={mat} className="flex items-center">
@@ -158,7 +161,6 @@ const FilterSidebar = () => {
             <span className="ml-2">{mat}</span>
           </label>
         ))}
-
         BRAND
         {brands.map((brand) => (
           <label key={brand} className="flex items-center">
@@ -172,7 +174,6 @@ const FilterSidebar = () => {
             <span className="ml-2">{brand}</span>
           </label>
         ))}
-
         PRICE
         <input
           type="range"

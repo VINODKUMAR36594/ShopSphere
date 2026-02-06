@@ -1,6 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import {
+  fetchProductDetails,
+  updateProduct
+} from '../redux/slices/adminProductSlice'
 
 const EditProductPage = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { id } = useParams()
+
+  const { selectedProduct, loading, error } = useSelector(
+    (state) => state.adminProducts
+  )
 
   const [productsData, setProductsData] = useState({
     name: "",
@@ -15,11 +29,22 @@ const EditProductPage = () => {
     collections: "",
     material: "",
     gender: "",
-    images: [
-      { url: "https://picsum.photos/150?random=1" },
-      { url: "https://picsum.photos/150?random=2" }
-    ]
+    images: []
   })
+
+  const [uploading, setUploading] = useState(false)
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchProductDetails(id))
+    }
+  }, [dispatch, id])
+
+  useEffect(() => {
+    if (selectedProduct) {
+      setProductsData(selectedProduct)
+    }
+  }, [selectedProduct])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -29,14 +54,54 @@ const EditProductPage = () => {
     }))
   }
 
-  const handleImageUpload = (e) => {
+  // ✅ FIXED: async + FormData + syntax
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0]
-    console.log(file)
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append("image", file)
+
+    try {
+      setUploading(true)
+
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/upload`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+
+      setProductsData(prevData => ({
+        ...prevData,
+        images: [
+          ...prevData.images,
+          { url: data.imageUrl, altText: "" }
+        ],
+      }))
+
+      setUploading(false)
+    } catch (error) {
+      console.error(error)
+      setUploading(false)
+    }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(productsData)
+    dispatch(updateProduct({ id, productsData }))
+    navigate("/admin/products")
+  }
+
+  if (loading) {
+    return <p>Loading...</p>
+  }
+
+  if (error) {
+    return <p>Error loading product</p>
   }
 
   return (
@@ -55,6 +120,7 @@ const EditProductPage = () => {
             required
           />
         </div>
+
         <div className="mb-6">
           <label className="block font-semibold mb-2">Description</label>
           <textarea
@@ -66,67 +132,12 @@ const EditProductPage = () => {
             required
           />
         </div>
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Price</label>
-          <input
-            type="number"
-            name="price"
-            value={productsData.price}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Count In Stock</label>
-          <input
-            type="number"
-            name="countInStock"
-            value={productsData.countInStock}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">SKU</label>
-          <input
-            type="text"
-            name="sku"
-            value={productsData.sku}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Sizes</label>
-          <input
-            type="text"
-            value={productsData.sizes.join(",")}
-            onChange={(e) =>
-              setProductsData({
-                ...productsData,
-                sizes: e.target.value.split(",").map(s => s.trim())
-              })
-            }
-            className="w-full border border-gray-300 rounded-md p-2"
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Colors</label>
-          <input
-            type="text"
-            value={productsData.colors.join(",")}
-            onChange={(e) =>
-              setProductsData({
-                ...productsData,
-                colors: e.target.value.split(",").map(c => c.trim())
-              })
-            }
-            className="w-full border border-gray-300 rounded-md p-2"
-          />
-        </div>
+
         <div className="mb-6">
           <label className="block font-semibold mb-2">Upload Image</label>
           <input type="file" onChange={handleImageUpload} />
+          {uploading && <p>Uploading...</p>}
+
           <div className="flex gap-4 mt-4">
             {productsData.images.map((image, index) => (
               <img
@@ -138,6 +149,7 @@ const EditProductPage = () => {
             ))}
           </div>
         </div>
+
         <button className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600">
           Update Product
         </button>
@@ -145,4 +157,5 @@ const EditProductPage = () => {
     </div>
   )
 }
+
 export default EditProductPage

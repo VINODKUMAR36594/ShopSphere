@@ -1,20 +1,29 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-
+import axios from 'axios'
 const NewArrivals = () => {
   const scrollRef = useRef(null);
 
-  const newArrivals = [
-    { _id: "1", name: "Stylish Jacket", price: 120, images: [{ url: 'https://picsum.photos/500/500?random=1', altText: "Stylish Jacket" }] },
-    { _id: "3", name: "Modern Coat", price: 150, images: [{ url: 'https://picsum.photos/500/500?random=3', altText: "Modern Coat" }] },
-    { _id: "4", name: "Casual Hoodie", price: 90, images: [{ url: 'https://picsum.photos/500/500?random=4', altText: "Casual Hoodie" }] },
-    { _id: "5", name: "Winter Jacket", price: 200, images: [{ url: 'https://picsum.photos/500/500?random=5', altText: "Winter Jacket" }] },
-    { _id: "6", name: "Denim Shirt", price: 80, images: [{ url: 'https://picsum.photos/500/500?random=6', altText: "Denim Shirt" }] },
-    { _id: "7", name: "Leather Blazer", price: 300, images: [{ url: 'https://picsum.photos/500/500?random=7', altText: "Leather Blazer" }] },
-    { _id: "8", name: "Classic Trench", price: 250, images: [{ url: 'https://picsum.photos/500/500?random=8', altText: "Classic Trench" }] },
-  ];
+ const [newArrivals, setNewArrivals] = React.useState([]);
+ useEffect(()=>{
+  const fetchNewArrivals=async()=>{
+    try {
+      const response=await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/new-arrivals`);
+      setNewArrivals(response.data);
+    } catch (error) {
+      console.error(error);
 
+      
+    }
+  }
+  fetchNewArrivals();
+ },[])
+useEffect(() => {
+  if (scrollRef.current) {
+    scrollRef.current.scrollLeft = 0;
+  }
+}, [newArrivals]);
   const scroll = (direction) => {
     if (scrollRef.current) {
       const scrollAmount = direction === 'left' ? -300 : 300;
@@ -31,7 +40,7 @@ const NewArrivals = () => {
         </p>
 
         {/* Scroll buttons */}
-        <div className="absolute right-0 bottom-[-30px] flex space-x-2">
+        <div className="absolute right-0 -bottom-7.5 flex space-x-2">
           <button
             onClick={() => scroll('left')}
             aria-label="Scroll left"
@@ -52,12 +61,12 @@ const NewArrivals = () => {
       {/* Scrollable content */}
       <div ref={scrollRef} className="container mx-auto overflow-x-auto flex space-x-6 pb-4">
         {newArrivals.map((product) => (
-          <div key={product._id} className="relative min-w-[250px] rounded-lg overflow-hidden shadow-md">
-            <img
-              src={product.images[0]?.url}
-              alt={product.images[0]?.altText || product.name}
-              className="w-full h-[350px] object-cover"
-            />
+          <div key={product._id} className="relative min-w-62.5 rounded-lg overflow-hidden shadow-md">
+           <img
+  src={product.images?.[0]?.url}
+  alt={product.images?.[0]?.altText || product.name}
+  className="w-full h-87.5 object-cover"
+/>
             <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 backdrop-blur-sm text-white p-4">
               <Link to={`/product/${product._id}`} className="block hover:underline">
                 <h4 className="font-medium">{product.name}</h4>
