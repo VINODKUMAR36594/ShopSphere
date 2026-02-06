@@ -17,11 +17,10 @@ import UserManagement from "./Admin/UserManagement";
 import ProductManagement from "./Admin/ProductManagement";
 import EditProductPage from "./Admin/EditProductPage";
 import OrderManagement from "./Admin/OrderManagement";
-// import { RouterProvider } from "react-redux";
 import { Provider } from "react-redux";
-// import store from "./redux/store.js";
-import store from "../src/redux/store.js";
+import store from "./redux/store.js";
 import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
+
 function App() {
   return (
     <Provider store={store}>
@@ -34,30 +33,18 @@ function App() {
             {/* User Layout */}
             <Route index element={<Home />} />
           </Route>
-          <Route>{/* Admin Layout*/}</Route>
-          <Route
-            path="collections/:collection"
-            element={<CollectionPage />}
-          ></Route>
-          <Route path="product/:id" element={<ProductDetails />}>
-            {" "}
-          </Route>
+          <Route path="collections/:collection" element={<CollectionPage />}></Route>
+          <Route path="product/:id" element={<ProductDetails />}></Route>
           <Route path="profile" element={<Profile />}></Route>
           <Route path="/checkout" element={<CheckOut />}></Route>
-          <Route
-            path="order-confirmation"
-            element={<OrderConfirmationPage />}
-          ></Route>
+          <Route path="order-confirmation" element={<OrderConfirmationPage />}></Route>
           <Route path="order/:id" element={<OrderDetailPage />}></Route>
           <Route path="my-orders" element={<MyOrders />}></Route>
           <Route path="/admin" element={<ProtectedRoute role="admin"><AdminLayout /></ProtectedRoute>}>
             <Route index element={<AdminHomePage />} />
             <Route path="users" element={<UserManagement />}></Route>
             <Route path="products" element={<ProductManagement />}></Route>
-            <Route
-              path="products/:id/edit"
-              element={<EditProductPage />}
-            ></Route>
+            <Route path="products/:id/edit" element={<EditProductPage />}></Route>
             <Route path="orders" element={<OrderManagement />}></Route>
           </Route>
         </Routes>

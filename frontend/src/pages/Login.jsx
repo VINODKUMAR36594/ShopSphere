@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react"; // ❌ useEffect missing earlier
-import { Link, useNavigate, useLocation } from "react-router-dom"; // ❌ missing
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import login from "../assets/login.webp";
-
 import { loginUser } from "../redux/slices/authSlice";
-import { mergeCart } from "../redux/slices/cartSlice"; // ❌ missing import
-
+import { mergeCart } from "../redux/slices/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Login = () => {
@@ -12,10 +10,10 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // ❌ missing earlier
-  const location = useLocation(); // ❌ missing earlier
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const { user, guestId } = useSelector((state) => state.auth);
+  const { user, guestId, loading, error } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
 
   const redirect =
@@ -25,12 +23,10 @@ const Login = () => {
   useEffect(() => {
     if (!user) return;
 
-    // ✅ FIX: proper if–else structure
     if (cart?.products?.length > 0 && guestId) {
-      dispatch(mergeCart({ guestId, userId: user._id }))
-        .then(() => {
-          navigate(isCheckoutRedirect ? "/checkout" : "/");
-        });
+      dispatch(mergeCart({ guestId, userId: user._id })).then(() => {
+        navigate(isCheckoutRedirect ? "/checkout" : "/");
+      });
     } else {
       navigate(isCheckoutRedirect ? "/checkout" : "/");
     }
@@ -44,23 +40,27 @@ const Login = () => {
   return (
     <div className="flex">
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-12">
+<<<<<<< HEAD
 
         {/* ❌ onClick was wrong */}
         <form
-          onSubmit={handleSubmit} // ✅ FIX
+          onSubmit={handleSubmit}
           className="w-full max-w-md bg-white p-8 rounded-lg border shadow-sm"
         >
           <div className="flex justify-center mb-6">
             <h2 className="text-xl font-medium">ShopSphere</h2>
           </div>
 
-          <h2 className="text-2xl font-bold text-center mb-6">
-            Hey there!
-          </h2>
-
+          <h2 className="text-2xl font-bold text-center mb-6">Hey there!</h2>
           <p className="text-center mb-6">
-            Enter your username and password to Login
+            Enter your email and password to Login
           </p>
+
+          {error && (
+            <p className="text-red-500 text-center mb-4 text-sm font-medium">
+              {error}
+            </p>
+          )}
 
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-2">Email</label>
@@ -69,26 +69,31 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full p-2 border rounded"
+              placeholder="Enter your email address"
+              required
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2">
-              Password
-            </label>
+            <label className="block text-sm font-semibold mb-2">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full p-2 border rounded-lg"
+              placeholder="Enter your Password"
+              required
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition"
+            disabled={loading}
+            className={`w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition ${
+              loading ? "opacity-70 cursor-not-allowed" : ""
+            }`}
           >
-            Sign In
+            {loading ? "Signing In..." : "Sign In"}
           </button>
 
           <p className="mt-6 text-center text-sm">
@@ -107,8 +112,7 @@ const Login = () => {
         <img
           src={login}
           alt="Login to Account"
-          className="h-full w-full object-cover" 
-          // ❌ h-187.5 removed
+          className="h-full w-full object-cover"
         />
       </div>
     </div>

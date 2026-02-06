@@ -2,13 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const ProductGrid = ({ products = [], loading = false, error = null }) => {
-  // 1️⃣ loading state
-  if (loading) return <p>Loading...</p>
-
-  // 2️⃣ error state
-  if (error) return <p>Error: {error}</p>
-
-  // 3️⃣ safety check
+  if (loading) return <p className='text-center p-4'>Loading...</p>
+  if (error) return <p className='text-center p-4 text-red-600'>Error: {error}</p>
   if (!Array.isArray(products) || products.length === 0) {
     return <p className="text-center">No products available</p>
   }
@@ -18,32 +13,19 @@ const ProductGrid = ({ products = [], loading = false, error = null }) => {
       {products.map((product) => {
         if (!product) return null
 
-        const imageUrl = product.images?.[0]?.url
-
         return (
           <Link key={product._id} to={`/product/${product._id}`} className="block">
             <div className="bg-white p-4 rounded-lg">
               <div className="w-full h-96 mb-4">
-                {imageUrl ? (
-                  <img
-  src={
-    product.images?.[0]?.url ||
-    `https://picsum.photos/400/600?random=${product._id}`
-  }
-  alt={product.name}
-  className="w-full h-full object-cover rounded-lg"
-/>
-
-                ) : (
-                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                    No Image
-                  </div>
-                )}
+                <img
+                  src={product.images?.[0]?.url || '/placeholder.png'}
+                  alt={product.name}
+                  className="w-full h-full object-cover rounded-lg"
+                />
               </div>
-
               <h3 className="text-sm mb-2">{product.name}</h3>
               <p className="text-gray-400 font-medium text-sm">
-                ${product.price}
+                ₹{product.price}
               </p>
             </div>
           </Link>

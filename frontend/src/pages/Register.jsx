@@ -3,12 +3,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import register from "../assets/register.webp";
 import { registerUser } from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-
-// ❌ MISSING IMPORT
 import { mergeCart } from "../redux/slices/cartSlice";
 
 const Register = () => {
-  // ❌ BAD naming → fixed
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +32,6 @@ const Register = () => {
       navigate(isCheckoutRedirect ? "/checkout" : "/");
     }
   }, [user, guestId, cart, navigate, isCheckoutRedirect, dispatch]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(registerUser({ name, email, password }));
@@ -60,7 +56,6 @@ const Register = () => {
             Enter your details to register
           </p>
 
-          {/* ❌ INPUT TYPE FIX */}
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-2">Name</label>
             <input
@@ -125,6 +120,32 @@ const Register = () => {
           />
         </div>
       </div>
+=======
+                
+                
+                >
+                    Sign Up
+                </button>
+                {/* <p className='mt-6 text-center text-sm'>
+                    Don't have an account?{}
+                
+                {/* <Link to='/register' className='text-blue-500 text-center'>Register</Link> */}
+                
+                {/* </p> */} 
+                
+                
+                
+        
+                
+                
+                </form> 
+                </div>
+                <div className='hidden md:block w-1/2 bg-gray-800'>
+                <div className='h-full flex flex-col justify-center items-center'>
+                    <img src={register} alt="Login to Account" className='h-187.5 w-full object-cover '/>
+                    </div>
+                    </div>
+>>>>>>> e57d00f154bfc8053367ce2b3195e46d5911e4dd
     </div>
   );
 };

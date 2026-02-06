@@ -1,23 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { FaFilter } from 'react-icons/fa';
 import FilterSidebar from '../components/Products/FilterSlidebar';
 import SortOptions from '../components/Products/SortOptions';
-import ProductGrid from '../components/Products/ProductGrid'
+<<<<<<< HEAD
+import ProductGrid from '../components/Products/ProductGrid';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductsByFilters } from '../redux/slices/productSlice';
+
 const CollectionPage = () => {
-  const {collection}=useParams();
-  const [searchParams]=useSearchParams();
-  const dispatch=useDispatch();
-  const {products,loading,error}=useSelector((state)=>
-    state.products
-  )
-  const queryParams=Object.fromEntries([...searchParams])
-  useEffect(()=>{
-    dispatch(fetchProductsByFilters({collection,...queryParams}))
-  },[dispatch,collection,searchParams])
-  // const [products, setProducts] = useState([]);
+  const { collection } = useParams();
+  const [searchParams] = useSearchParams();
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((state) => state.products);
+  
+  const queryParams = Object.fromEntries([...searchParams]);
   const sidebarRef = useRef(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -41,7 +40,13 @@ const CollectionPage = () => {
     };
   }, []);
 
-  
+  useEffect(() => {
+    dispatch(fetchProductsByFilters({ collection, ...queryParams }));
+  }, [dispatch, collection, searchParams]);
+      dispatch(fetchProductsByFilters({ ...filters, limit: 20 }));
+    }
+  }, [collection, dispatch]);
+>>>>>>> e57d00f154bfc8053367ce2b3195e46d5911e4dd
 
   return (
     <div className='flex flex-col lg:flex-row'>
@@ -62,12 +67,17 @@ const CollectionPage = () => {
       >
         <FilterSidebar />
       </div>
-      <div className='flex-grow p-4 '>
-        <h2 className='text-2xl uppercase mb-4 '>All Collection</h2>
-        {/* sort option */}
+      <div className='flex-grow p-4'>
+        <h2 className='text-2xl uppercase mb-4'>{formatCollectionName(collection || 'All')} Collection</h2>
+        {/* Sort options */}
         <SortOptions/>
+<<<<<<< HEAD
         {/* Proudct Grid */}
         <ProductGrid products={products} loading={loading} error={error}/>
+=======
+        {/* Product Grid */}
+        <ProductGrid products={products} loading={loading} error={error} />
+>>>>>>> e57d00f154bfc8053367ce2b3195e46d5911e4dd
       </div>
     </div>
   );
