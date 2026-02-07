@@ -2,7 +2,7 @@
 
 **ShopSphere** is a modern **e-commerce web application** built with JavaScript that provides a smooth shopping experience for users. This project showcases a user-friendly online store interface where users can browse products and interact with the application's features.
 
----
+--
 
 ## 🚀 Features
 
