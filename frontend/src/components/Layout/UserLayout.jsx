@@ -1,23 +1,22 @@
 import React from 'react'
-import Header from '../common/Header'
-import Footer  from '../common/Footer'
+import Header from '../Common/Header'
+// import Navbar from '../Common/Navbar'
+import Footer from '../Common/Footer'
 import { Outlet } from 'react-router-dom'
+
 const UserLayout = () => {
   return (
     <>
-    {/* Header */}
-    <Header/>
-
-    {/* Main contents */}
-    <main>
-      <Outlet/>
-    </main>
-    
-    <Footer/>
-    {/* footer */}
+      {/* Herder */}
+      <Header/>
+      {/* Main contenet */}
+      <main>
+        <Outlet/>
+      </main>
+      {/* Footer */}
+      <Footer/>
     </>
   )
 }
 
 export default UserLayout
-

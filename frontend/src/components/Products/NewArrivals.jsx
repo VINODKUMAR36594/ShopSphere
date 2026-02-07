@@ -1,130 +1,146 @@
-<<<<<<< HEAD
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import axios from 'axios'
-=======
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import axios from "axios";
 
->>>>>>> e57d00f154bfc8053367ce2b3195e46d5911e4dd
 const NewArrivals = () => {
   const scrollRef = useRef(null);
+
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [newArrivals, setNewArrivals] = useState([]);
 
-<<<<<<< HEAD
- const [newArrivals, setNewArrivals] = React.useState([]);
- useEffect(()=>{
-  const fetchNewArrivals=async()=>{
-    try {
-      const response=await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/new-arrivals`);
-      setNewArrivals(response.data);
-    } catch (error) {
-      console.error(error);
-=======
   useEffect(() => {
     const fetchNewArrivals = async () => {
       try {
-        const response = await fetch(
+        const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/products/new-arrivals`
         );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch new arrivals");
-        }
-
-        const data = await response.json();
-        setNewArrivals(data);
+        setNewArrivals(res.data || []);
       } catch (error) {
-        console.error("Error fetching new arrivals:", error);
+        console.error(error);
       }
     };
-
     fetchNewArrivals();
   }, []);
->>>>>>> e57d00f154bfc8053367ce2b3195e46d5911e4dd
 
-      
-    }
-  }
-  fetchNewArrivals();
- },[])
-useEffect(() => {
-  if (scrollRef.current) {
-    scrollRef.current.scrollLeft = 0;
-  }
-}, [newArrivals]);
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const scrollAmount = direction === "left" ? -300 : 300;
-      scrollRef.current.scrollBy({
-        left: scrollAmount,
-        behavior: "smooth",
-      });
-    }
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeft(scrollRef.current.scrollLeft);
   };
 
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = x - startX;
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    setIsDragging(false);
+  };
+
+  const scroll = (direction) => {
+    const scrollAmount = direction === "left" ? -300 : 300;
+    scrollRef.current.scrollBy({
+      left: scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
+  const updateScrollButtons = () => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const left = container.scrollLeft;
+    const canRight =
+      container.scrollWidth > left + container.clientWidth;
+
+    setCanScrollLeft(left > 0);
+    setCanScrollRight(canRight);
+  };
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    container.addEventListener("scroll", updateScrollButtons);
+    updateScrollButtons();
+
+    return () =>
+      container.removeEventListener("scroll", updateScrollButtons);
+  }, [newArrivals]);
+
   return (
-    <section className="py-10">
+    <section className="py-16 px-4 lg:px-0">
       <div className="container mx-auto text-center mb-10 relative">
         <h2 className="text-3xl font-bold mb-4">Explore New Arrivals</h2>
         <p className="text-lg text-gray-600 mb-8">
-          Discover the latest styles straight off the runway, freshly added to
-          keep your wardrobe on the cutting edge of fashion.
+          Discover the latest styles straight off the runway.
         </p>
 
-        {/* Scroll buttons */}
-        <div className="absolute right-0 -bottom-7.5 flex space-x-2">
-=======
-        <div className="absolute right-0 bottom-7.5 flex space-x-2">
->>>>>>> e57d00f154bfc8053367ce2b3195e46d5911e4dd
+        <div className="absolute right-0 bottom-[-30px] flex space-x-2">
           <button
             onClick={() => scroll("left")}
-            className="p-2 rounded border bg-white shadow hover:bg-gray-100"
+            disabled={!canScrollLeft}
+            className={`p-2 rounded border ${
+              canScrollLeft
+                ? "bg-white text-black"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            }`}
           >
             <FiChevronLeft className="text-2xl" />
           </button>
+
           <button
             onClick={() => scroll("right")}
-            className="p-2 rounded border bg-white shadow hover:bg-gray-100"
+            disabled={!canScrollRight}
+            className={`p-2 rounded border ${
+              canScrollRight
+                ? "bg-white text-black"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            }`}
           >
             <FiChevronRight className="text-2xl" />
           </button>
         </div>
       </div>
 
-      {/* Products */}
       <div
         ref={scrollRef}
-        className="container mx-auto overflow-x-auto flex space-x-6 pb-4"
+        className={`container mx-auto overflow-x-scroll flex space-x-6 ${
+          isDragging ? "cursor-grabbing" : "cursor-grab"
+        }`}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUpOrLeave}
+        onMouseLeave={handleMouseUpOrLeave}
       >
         {newArrivals.map((product) => (
-<<<<<<< HEAD
-          <div key={product._id} className="relative min-w-62.5 rounded-lg overflow-hidden shadow-md">
-           <img
-  src={product.images?.[0]?.url}
-  alt={product.images?.[0]?.altText || product.name}
-  className="w-full h-87.5 object-cover"
-/>
-            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 backdrop-blur-sm text-white p-4">
-              <Link to={`/product/${product._id}`} className="block hover:underline">
-=======
           <div
             key={product._id}
-            className="relative min-w-62.5 rounded-lg overflow-hidden shadow-md"
+            className="min-w-[100%] sm:min-w-[50%] lg:min-w-[30%] relative"
           >
             <img
-              src={product.images?.[0]?.url || "/placeholder.png"}
-              alt={product.name}
-              className="w-full h-87.5 object-cover"
+              src={product.images?.[0]?.url || "/placeholder.jpg"}
+              alt={
+                product.images?.[0]?.altText ||
+                product.name ||
+                "Product image"
+              }
+              className="w-full h-[500px] object-cover rounded-lg"
+              draggable="false"
             />
 
-            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
-              <Link to={`/product/${product._id}`} className="hover:underline">
->>>>>>> e57d00f154bfc8053367ce2b3195e46d5911e4dd
+            <div className="absolute bottom-0 left-0 right-0 backdrop-blur-md text-white p-4 rounded-b-lg">
+              <Link to={`/product/${product._id}`}>
                 <h4 className="font-medium">{product.name}</h4>
-                <p className="mt-1">₹{product.price}</p>
+                <p className="mt-1">${product.price}</p>
               </Link>
             </div>
           </div>
