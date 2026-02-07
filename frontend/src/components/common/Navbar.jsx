@@ -34,7 +34,7 @@ const Navbar = () => {
         {/* left-logo */}
         <div>
           <Link to="/" className="text-2xl font-medium">
-            Rabbit
+            ShopSphere
           </Link>
         </div>
         {/* Center navigation Links */}
