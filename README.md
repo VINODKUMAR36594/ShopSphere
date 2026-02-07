@@ -23,8 +23,4 @@
 | UI/UX | Responsive design principles |
 | Deployment | Static hosting (GitHub Pages / Netlify / Vercel) |
 
-_All core code is structured for maintainability and future feature expansion._
-
----
-
-## 📁 Repository Structure
+A big thank you to Karthik Chilumula (@KarthikChilumula685) for their valuable contributions to this project!
