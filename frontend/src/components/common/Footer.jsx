@@ -18,7 +18,6 @@ const Footer = () => {
           <p className="font-medium text-sm text-gray-600 mb-6">
             Sign up and get 10% off your first order.
           </p>
-
           {/* NewsLetter from */}
           <form className="flex">
             <input

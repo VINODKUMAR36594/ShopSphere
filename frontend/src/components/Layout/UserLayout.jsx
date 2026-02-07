@@ -1,7 +1,7 @@
 import React from 'react'
-import Header from '../Common/Header'
-// import Navbar from '../Common/Navbar'
-import Footer from '../Common/Footer'
+import Header from '../common/Header'
+import Footer from '../common/Footer'
+// import Footer from '../common/Footer'
 import { Outlet } from 'react-router-dom'
 
 const UserLayout = () => {
